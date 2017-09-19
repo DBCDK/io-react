@@ -115,9 +115,9 @@ class JobInfo extends React.Component {
 					<table className="table">
 						<thead>
 							<tr>
-								<td>number</td>
-								<td>id</td>
-								<td>status</td>
+								<th>number</th>
+								<th>id</th>
+								<th>status</th>
 							</tr>
 						</thead>
 						<tbody>
