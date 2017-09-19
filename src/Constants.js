@@ -4,6 +4,7 @@ const itemsListEndpoint = "/itemsList/:jobId";
 const itemsCountEndpoint = "/itemslist/:jobId/count";
 const itemJavascriptLogEndpoint = "/jobinfo/:jobId/log/:chunkId/:itemId";
 const chunkItemEndpoint = "/jobinfo/:jobId/chunkItem/:chunkId/:itemId/:phase";
+const flowBindersEndpoint = "/flowbindersList";
 
 class JobConstants {
 	static get jobsListEndpoint() {
@@ -23,6 +24,9 @@ class JobConstants {
 	}
 	static get itemsCountEndpoint() {
 		return itemsCountEndpoint;
+	}
+	static get flowBindersEndpoint() {
+		return flowBindersEndpoint;
 	}
 }
 

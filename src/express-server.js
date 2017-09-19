@@ -49,6 +49,10 @@ app.get(Constants.chunkItemEndpoint, (req, res) => {
 			.send(chunkItem));
 });
 
+app.get(Constants.flowBindersEndpoint, (req, res) => {
+	StoresConnector.getFlowBinders(json => res.status(200).send(json));
+});
+
 // handle the rest of the routing in the client
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "/static/index.html"));

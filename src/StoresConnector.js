@@ -3,11 +3,13 @@ import State from "./model/State.js";
 
 const jobStoreBaseUrl = process.env.JOBSTORE_URL;
 const logStoreBaseUrl = process.env.LOGSTORE_URL;
+const flowStoreBaseUrl = process.env.FLOWSTORE_URL;
 
 const jobsSearches = "jobs/searches";
 const jobsCount = "jobs/searches/count";
 const itemsList = "jobs/chunks/items/searches";
 const itemsCount = "jobs/chunks/items/searches/count";
+const flowBinders = "binders";
 
 const phaseToPath = function(phase) {
 	switch(phase) {
@@ -58,6 +60,10 @@ class StoresConnector {
 			.add_headers({"Content-Type": "application/json"})
 			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${itemsCount}`);
+	}
+	static getFlowBinders(callback) {
+		new HttpClient().with_callback(callback)
+			.get(`${flowStoreBaseUrl}/${flowBinders}`);
 	}
 }
 

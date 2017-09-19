@@ -7,6 +7,7 @@ const Sidebar = () => (
 			<h1>dataio</h1>
 			<ul>
 				<li><Link to="/">jobs</Link></li>
+				<li><Link to="/flowbinderslist">flow binders</Link></li>
 			</ul>
 		</nav>
 	</div>
