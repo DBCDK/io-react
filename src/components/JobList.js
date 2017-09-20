@@ -1,21 +1,11 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
+import BaseList from "../model/BaseList";
 import Constants from "../Constants";
 import DateTime from "../util/DateTime";
-import HttpClient from "../HttpClient";
 import Job from "../model/Job";
 import Pager from "./Pager";
-
-const getJobs = function(jsonStr) {
-	const json = JSON.parse(jsonStr);
-	const jobs = [];
-	for(let i = 0; i < json.length; i++) {
-		const job = Job.fromJson(json[i]);
-		jobs.push(job);
-	}
-	return jobs;
-}
 
 const mapJobStatusToIcon = function(status) {
 	switch(status) {
@@ -56,29 +46,17 @@ class JobElement extends React.Component {
 class JobList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			jobList: [],
-			jobCount: 0,
-			limit: 50,
-			offset: 0
-		};
+		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		new HttpClient().with_callback(json =>
-			this.setState({jobCount: parseInt(json)}))
-			.withQuery({
-				limit: this.state.limit, offset: this.state.offset
-			})
-			.get(Constants.jobsCountEndpoint);
+		BaseList.getItemsCount(Constants.jobsCountEndpoint, null, json =>
+			this.setState({count: parseInt(json)}));
 		this.updateJobList();
 	}
 	updateJobList() {
-		new HttpClient().with_callback(json =>
-			this.setState({jobList: getJobs(json)}))
-			.withQuery({
-				limit: this.state.limit, offset: this.state.offset
-			})
-			.get(Constants.jobsListEndpoint);
+		BaseList.getItems(Constants.jobsListEndpoint, null, this.state.limit,
+				this.state.offset, json =>
+			this.setState({items: BaseList.mapItemsFromJson(Job, json)}));
 	}
 	onBackClicked() {
 		if(this.state.offset >= this.state.limit) {
@@ -88,7 +66,7 @@ class JobList extends React.Component {
 		}
 	}
 	onForwardClicked() {
-		if((this.state.offset + this.state.limit) < this.state.jobCount) {
+		if((this.state.offset + this.state.limit) < this.state.count) {
 			this.state.offset += this.state.limit;
 			this.setState({offset: this.state.offset});
 			this.updateJobList();
@@ -100,8 +78,8 @@ class JobList extends React.Component {
 		this.updateJobList();
 	}
 	onEndClicked() {
-		if((this.state.offset + this.state.limit) < this.state.jobCount) {
-			this.state.offset = this.state.jobCount - this.state.limit;
+		if((this.state.offset + this.state.limit) < this.state.count) {
+			this.state.offset = this.state.count - this.state.limit;
 			this.setState({offset: this.state.offset});
 			this.updateJobList();
 		}
@@ -110,7 +88,7 @@ class JobList extends React.Component {
 		return (
 			<div>
 				<h1>jobs</h1>
-				<Pager pos={this.state.offset} interval={this.state.limit} total={this.state.jobCount} onBackClicked={this.onBackClicked.bind(this)} onForwardClicked={this.onForwardClicked.bind(this)} onBeginningClicked={this.onBeginningClicked.bind(this)} onEndClicked={this.onEndClicked.bind(this)}/>
+				<Pager pos={this.state.offset} interval={this.state.limit} total={this.state.count} onBackClicked={this.onBackClicked.bind(this)} onForwardClicked={this.onForwardClicked.bind(this)} onBeginningClicked={this.onBeginningClicked.bind(this)} onEndClicked={this.onEndClicked.bind(this)}/>
 				{/* class="table" is defined by bootstrap css*/}
 				<table className="table job-list">
 					<thead>
@@ -126,7 +104,7 @@ class JobList extends React.Component {
 					</thead>
 					<tbody>
 					{
-						this.state.jobList.map((job, i) => <JobElement key={i} job={job} />)
+						this.state.items.map((job, i) => <JobElement key={i} job={job} />)
 					}
 					</tbody>
 				</table>
