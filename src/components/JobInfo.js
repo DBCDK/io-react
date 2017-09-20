@@ -81,9 +81,9 @@ class JobInfo extends React.Component {
 	updateItemList() {
 		const pathParams = new Map();
 		pathParams.set("jobId", this.props.match.params.jobId);
+		const query = {limit: this.state.limit, offset: this.state.offset};
 		BaseList.getItems(Constants.itemsListEndpoint,
-				pathParams, this.state.limit,
-				this.state.offset, json => {
+				pathParams, query, json => {
 			this.setState({items: BaseList.mapItemsFromJson(Item, json)});
 			if(this.state.items.length > 0) {
 				this.state.currentItemListener.onCurrentItemChanged(this.state.items[0]);

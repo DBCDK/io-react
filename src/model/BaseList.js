@@ -20,13 +20,13 @@ class BaseList {
 		new HttpClient().with_callback(callback)
 			.get(path.path);
 	}
-	static getItems(endpoint, pathParams, limit, offset, callback) {
+	static getItems(endpoint, pathParams, queryObject, callback) {
 		const path = new Path(endpoint);
 		if(pathParams !== null) {
 			pathParams.forEach((value, key) => path.bind(key, value));
 		}
 		new HttpClient().with_callback(callback)
-			.withQuery({limit: limit, offset: offset})
+			.withQuery(queryObject)
 			.get(path.path);
 	}
 	static mapItemsFromJson(type, itemListJson) {
