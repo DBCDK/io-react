@@ -1,22 +1,11 @@
 import React from "react";
 
 import Constants from "../Constants";
-import HttpClient from "../HttpClient";
+import BaseList from "../model/BaseList";
 import Item from "../model/Item";
 import ItemInfo from "./ItemInfo";
 import Listener from "../Listener";
 import Pager from "./Pager";
-import Path from "../utils";
-
-const getItems = function(itemListJson) {
-	const js = JSON.parse(itemListJson);
-	const items = [];
-	for(let i = 0; i < js.length; i++) {
-		const item = Item.fromJson(js[i]);
-		items.push(item);
-	}
-	return items;
-}
 
 class CurrentItemListener extends Listener {
 	onCurrentItemChanged(item) {
@@ -50,35 +39,17 @@ class JobInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			items: [],
-			itemCount: 0,
-			limit: 50,
-			offset: 0,
 			currentItemListener: new CurrentItemListener()
 		};
+		Object.assign(this.state, BaseList.getBaseListStateObject());
 	}
 	componentWillMount() {
-		const path = new Path(Constants.itemsCountEndpoint);
-		path.bind("jobId", this.props.match.params.jobId);
-		new HttpClient().with_callback(json =>
-			this.setState({itemCount: parseInt(json)}))
-			.get(path.path);
-		this.updateItemList();
+		BaseList.getItemsCount(Constants.itemsCountEndpoint,
+				this.props.match.params.jobId, json => {
+			this.setState({count: parseInt(json)});
+			this.updateItemList();
+		});
 	}
-	updateItemList() {
-		const path = new Path(Constants.itemsListEndpoint);
-		path.bind("jobId", this.props.match.params.jobId);
-		new HttpClient().with_callback(
-			json => {
-				this.setState({items: getItems(json)});
-				if(this.state.items.length > 0) {
-					this.state.currentItemListener.onCurrentItemChanged(this.state.items[0]);
-				}
-			})
-		.withQuery({limit: this.state.limit, offset: this.state.offset})
-		.get(path.path);
-	}
-	// TODO: duplicate code in JobList.js
 	onBackClicked() {
 		if(this.state.offset >= this.state.limit) {
 			this.state.offset -= this.state.limit;
@@ -87,7 +58,7 @@ class JobInfo extends React.Component {
 		}
 	}
 	onForwardClicked() {
-		if((this.state.offset + this.state.limit) < this.state.itemCount) {
+		if((this.state.offset + this.state.limit) < this.state.count) {
 			this.state.offset += this.state.limit;
 			this.setState({offset: this.state.offset});
 			this.updateItemList();
@@ -99,18 +70,28 @@ class JobInfo extends React.Component {
 		this.updateItemList();
 	}
 	onEndClicked() {
-		if((this.state.offset + this.state.limit) < this.state.itemCount) {
-			this.state.offset = this.state.itemCount - this.state.limit;
+		if((this.state.offset + this.state.limit) < this.state.count) {
+			this.state.offset = this.state.count - this.state.limit;
 			this.setState({offset: this.state.offset});
 			this.updateItemList();
 		}
+	}
+	updateItemList() {
+		BaseList.getItems(Constants.itemsListEndpoint,
+				this.props.match.params.jobId, this.state.limit,
+				this.state.offset, json => {
+			this.setState({items: BaseList.mapItemsFromJson(Item, json)});
+			if(this.state.items.length > 0) {
+				this.state.currentItemListener.onCurrentItemChanged(this.state.items[0]);
+			}
+		});
 	}
 	render() {
 		return (
 			<div>
 				{/*match contains path params*/}
 				<h1>job: {this.props.match.params.jobId}</h1>
-				<Pager pos={this.state.offset} interval={this.state.limit} total={this.state.itemCount} onBackClicked={this.onBackClicked.bind(this)} onForwardClicked={this.onForwardClicked.bind(this)} onBeginningClicked={this.onBeginningClicked.bind(this)} onEndClicked={this.onEndClicked.bind(this)}/>
+				<Pager pos={this.state.offset} interval={this.state.limit} total={this.state.count} onBackClicked={this.onBackClicked.bind(this)} onForwardClicked={this.onForwardClicked.bind(this)} onBeginningClicked={this.onBeginningClicked.bind(this)} onEndClicked={this.onEndClicked.bind(this)}/>
 				<div id="items-list">
 					<table className="table">
 						<thead>
