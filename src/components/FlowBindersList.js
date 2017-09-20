@@ -1,19 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
+import BaseList from "../model/BaseList";
 import Constants from "../Constants";
 import FlowBinder from "../model/FlowBinder";
-import HttpClient from "../HttpClient";
-
-const getFlowBinders = function(jsonStr) {
-	const json = JSON.parse(jsonStr);
-	const flowBinders = [];
-	for(let i = 0; i < json.length; i++) {
-		const flowBinder = FlowBinder.fromJson(json[i]);
-		flowBinders.push(flowBinder);
-	}
-	return flowBinders;
-}
 
 class FlowBinderElement extends React.Component {
 	showSubmitter() {
@@ -55,15 +45,12 @@ class FlowBinderElement extends React.Component {
 class FlowBindersList extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			flowBinders: []
-		};
+		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		new HttpClient().with_callback(json => {
-			this.setState({flowBinders: getFlowBinders(json)})
-			})
-			.get(Constants.flowBindersEndpoint);
+		BaseList.getItems(Constants.flowBindersEndpoint, null, {}, json =>
+			this.setState({items: BaseList.mapItemsFromJson(FlowBinder, json)})
+		);
 	}
 	render() {
 		return (
@@ -87,7 +74,7 @@ class FlowBindersList extends React.Component {
 					</thead>
 					<tbody>
 					{
-						this.state.flowBinders.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder}/>)
+						this.state.items.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder}/>)
 					}
 					</tbody>
 				</table>
