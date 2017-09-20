@@ -16,9 +16,6 @@ class CurrentItemListener extends Listener {
 }
 
 class ItemElement extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 	onClick({target}) {
 		this.props.currentItemListener.onCurrentItemChanged(this.props.item);
 	}
