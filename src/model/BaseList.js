@@ -12,15 +12,19 @@ class BaseList {
 			offset: 0
 		};
 	}
-	static getItemsCount(endpoint, jobId, callback) {
+	static getItemsCount(endpoint, pathParams, callback) {
 		const path = new Path(endpoint);
-		path.bind("jobId", jobId);
+		if(pathParams !== null) {
+			pathParams.forEach((value, key) => path.bind(key, value));
+		}
 		new HttpClient().with_callback(callback)
 			.get(path.path);
 	}
-	static getItems(endpoint, jobId, limit, offset, callback) {
+	static getItems(endpoint, pathParams, limit, offset, callback) {
 		const path = new Path(endpoint);
-		path.bind("jobId", jobId);
+		if(pathParams !== null) {
+			pathParams.forEach((value, key) => path.bind(key, value));
+		}
 		new HttpClient().with_callback(callback)
 			.withQuery({limit: limit, offset: offset})
 			.get(path.path);

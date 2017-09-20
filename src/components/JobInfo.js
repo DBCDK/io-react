@@ -44,8 +44,10 @@ class JobInfo extends React.Component {
 		Object.assign(this.state, BaseList.getBaseListStateObject());
 	}
 	componentWillMount() {
+		const pathParams = new Map();
+		pathParams.set("jobId", this.props.match.params.jobId);
 		BaseList.getItemsCount(Constants.itemsCountEndpoint,
-				this.props.match.params.jobId, json => {
+				pathParams, json => {
 			this.setState({count: parseInt(json)});
 			this.updateItemList();
 		});
@@ -77,8 +79,10 @@ class JobInfo extends React.Component {
 		}
 	}
 	updateItemList() {
+		const pathParams = new Map();
+		pathParams.set("jobId", this.props.match.params.jobId);
 		BaseList.getItems(Constants.itemsListEndpoint,
-				this.props.match.params.jobId, this.state.limit,
+				pathParams, this.state.limit,
 				this.state.offset, json => {
 			this.setState({items: BaseList.mapItemsFromJson(Item, json)});
 			if(this.state.items.length > 0) {
