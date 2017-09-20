@@ -27,12 +27,7 @@ class BaseList {
 	}
 	static mapItemsFromJson(type, itemListJson) {
 		const js = JSON.parse(itemListJson);
-		const items = [];
-		for(let i = 0; i < js.length; i++) {
-			const item = type.fromJson(js[i]);
-			items.push(item);
-		}
-		return items;
+		return js.map(item => type.fromJson(item));
 	}
 }
 
