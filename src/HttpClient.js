@@ -62,7 +62,14 @@ class HttpClient {
         if(this.method === "POST" && this.data !== null) {
             req.send(this.data);
         }
-        req.end((err, res) => this.callback(res.text, err));
+        req.end((err, res) => {
+            if(res !== undefined) {
+                this.callback(res.text, err);
+            } else {
+                this.callback(null, err);
+                console.error(err);
+            }
+        });
     }
 }
 
