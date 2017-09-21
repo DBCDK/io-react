@@ -49,7 +49,7 @@ class JobList extends React.Component {
 		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		BaseList.getItemsCount(Constants.jobsCountEndpoint, null, json =>
+		BaseList.getSingleItem(Constants.jobsCountEndpoint, null, json =>
 			this.setState({count: parseInt(json)}));
 		this.updateJobList();
 	}

@@ -12,7 +12,7 @@ class BaseList {
 			offset: 0
 		};
 	}
-	static getItemsCount(endpoint, pathParams, callback) {
+	static getSingleItem(endpoint, pathParams, callback) {
 		const path = new Path(endpoint);
 		if(pathParams !== null) {
 			pathParams.forEach((value, key) => path.bind(key, value));

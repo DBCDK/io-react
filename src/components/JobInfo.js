@@ -43,7 +43,7 @@ class JobInfo extends React.Component {
 	componentWillMount() {
 		const pathParams = new Map();
 		pathParams.set("jobId", this.props.match.params.jobId);
-		BaseList.getItemsCount(Constants.itemsCountEndpoint,
+		BaseList.getSingleItem(Constants.itemsCountEndpoint,
 				pathParams, json => {
 			this.setState({count: parseInt(json)});
 			this.updateItemList();
