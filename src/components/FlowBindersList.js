@@ -3,20 +3,17 @@ import {Link} from "react-router-dom";
 
 import BaseList from "../model/BaseList";
 import Constants from "../Constants";
+import Flow from "../model/Flow";
 import FlowBinder from "../model/FlowBinder";
+import Sink from "../model/Sink";
 
 class FlowBinderElement extends React.Component {
+	componentDidMount() {
+		this.props.updateCallback(this.props.flowBinder);
+	}
 	showSubmitter() {
 		// temporarily just show the first submitter
 		return this.props.flowBinder.content.submitterIds[0];
-	}
-	lookupFlow() {
-		// should look up flow asynchronously
-		return this.props.flowBinder.content.flowId;
-	}
-	lookupSink() {
-		// should look up sink asynchronously
-		return this.props.flowBinder.content.sinkId;
 	}
 	getQueueProvider(sinkId) {
 		return "queue provider";
@@ -33,8 +30,8 @@ class FlowBinderElement extends React.Component {
 				<td>{this.props.flowBinder.content.destination}</td>
 				<td>{this.props.flowBinder.content.recordSplitter}</td>
 				<td>{this.showSubmitter()}</td>
-				<td>{this.lookupFlow()}</td>
-				<td>{this.lookupSink()}</td>
+				<td>{this.props.flowBinder.content.flow.content.name}</td>
+				<td>{this.props.flowBinder.content.sink.content.name}</td>
 				<td>{this.getQueueProvider(this.props.flowBinder.sinkId)}</td>
 				<td><Link to={editPath}>edit</Link></td>
 			</tr>
@@ -51,6 +48,33 @@ class FlowBindersList extends React.Component {
 		BaseList.getItems(Constants.flowBindersEndpoint, null, {}, json =>
 			this.setState({items: BaseList.mapItemsFromJson(FlowBinder, json)})
 		);
+	}
+	updateCallback(flowBinder) {
+		this.updateSink(flowBinder).then(this.updateFlow(flowBinder));
+	}
+	updateFlow(flowBinder) {
+		return new Promise((resolve, reject) => {
+			const params = new Map();
+			params.set("flowId", flowBinder.content.flowId);
+			BaseList.getSingleItem(Constants.flowsEndpoint, params, jsonStr => {
+				const json = JSON.parse(jsonStr);
+				flowBinder.content.flow = Flow.fromJson(json);
+				this.setState({items: this.state.items});
+				resolve();
+			});
+		});
+	}
+	updateSink(flowBinder, callback) {
+		return new Promise((resolve, reject) => {
+			const params = new Map();
+			params.set("sinkId", flowBinder.content.sinkId);
+			BaseList.getSingleItem(Constants.sinksEndpoint, params, jsonStr => {
+				const json = JSON.parse(jsonStr);
+				flowBinder.content.sink = Sink.fromJson(json);
+				this.setState({items: this.state.items});
+				resolve();
+			});
+		});
 	}
 	render() {
 		return (
@@ -74,7 +98,7 @@ class FlowBindersList extends React.Component {
 					</thead>
 					<tbody>
 					{
-						this.state.items.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder}/>)
+						this.state.items.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder} updateCallback={this.updateCallback.bind(this)}/>)
 					}
 					</tbody>
 				</table>

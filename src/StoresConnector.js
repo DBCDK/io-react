@@ -10,6 +10,8 @@ const jobsCount = "jobs/searches/count";
 const itemsList = "jobs/chunks/items/searches";
 const itemsCount = "jobs/chunks/items/searches/count";
 const flowBinders = "binders";
+const flows = "flows";
+const sinks = "sinks";
 
 const phaseToPath = function(phase) {
 	switch(phase) {
@@ -64,6 +66,14 @@ class StoresConnector {
 	static getFlowBinders(callback) {
 		new HttpClient().with_callback(callback)
 			.get(`${flowStoreBaseUrl}/${flowBinders}`);
+	}
+	static getFlow(flowId, callback) {
+		new HttpClient().with_callback(callback)
+			.get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
+	}
+	static getSink(sinkId, callback) {
+		new HttpClient().with_callback(callback)
+			.get(`${flowStoreBaseUrl}/${sinks}/${sinkId}`);
 	}
 }
 

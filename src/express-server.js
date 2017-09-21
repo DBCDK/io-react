@@ -53,6 +53,18 @@ app.get(Constants.flowBindersEndpoint, (req, res) => {
 	StoresConnector.getFlowBinders(json => res.status(200).send(json));
 });
 
+app.get(Constants.flowsEndpoint, (req, res) => {
+	StoresConnector.getFlow(req.params.flowId, json =>
+		res.status(200).send(json)
+	);
+});
+
+app.get(Constants.sinksEndpoint, (req, res) => {
+	StoresConnector.getSink(req.params.sinkId, json =>
+		res.status(200).send(json)
+	);
+});
+
 // handle the rest of the routing in the client
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "/static/index.html"));
