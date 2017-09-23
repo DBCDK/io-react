@@ -5,7 +5,7 @@ const itemsCountEndpoint = "/itemslist/:jobId/count";
 const itemJavascriptLogEndpoint = "/jobinfo/:jobId/log/:chunkId/:itemId";
 const chunkItemEndpoint = "/jobinfo/:jobId/chunkItem/:chunkId/:itemId/:phase";
 const flowBindersEndpoint = "/flowbindersList";
-const flowsEndpoint = "/flows/:flowId";
+const singleFlowEndpoint = "/flows/:flowId";
 const sinksEndpoint = "/sinks/:sinkId";
 
 class JobConstants {
@@ -30,8 +30,8 @@ class JobConstants {
 	static get flowBindersEndpoint() {
 		return flowBindersEndpoint;
 	}
-	static get flowsEndpoint() {
-		return flowsEndpoint;
+	static get singleFlowEndpoint() {
+		return singleFlowEndpoint;
 	}
 	static get sinksEndpoint() {
 		return sinksEndpoint;

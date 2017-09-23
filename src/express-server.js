@@ -53,7 +53,7 @@ app.get(Constants.flowBindersEndpoint, (req, res) => {
 	StoresConnector.getFlowBinders(json => res.status(200).send(json));
 });
 
-app.get(Constants.flowsEndpoint, (req, res) => {
+app.get(Constants.singleFlowEndpoint, (req, res) => {
 	StoresConnector.getFlow(req.params.flowId, json =>
 		res.status(200).send(json)
 	);

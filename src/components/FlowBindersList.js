@@ -56,7 +56,7 @@ class FlowBindersList extends React.Component {
 		return new Promise((resolve, reject) => {
 			const params = new Map();
 			params.set("flowId", flowBinder.content.flowId);
-			BaseList.getSingleItem(Constants.flowsEndpoint, params, jsonStr => {
+			BaseList.getSingleItem(Constants.singleFlowEndpoint, params, jsonStr => {
 				const json = JSON.parse(jsonStr);
 				flowBinder.content.flow = Flow.fromJson(json);
 				this.setState({items: this.state.items});
