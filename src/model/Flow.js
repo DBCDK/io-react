@@ -14,7 +14,7 @@ class Flow {
 	static fromJson(json) {
 		const flow = new this();
 		flow.id = json.id;
-		flow.version = flow.version;
+		flow.version = json.version;
 		flow.content = FlowContent.fromJson(json.content);
 		return flow;
 	}
