@@ -8,6 +8,7 @@ const Sidebar = () => (
 			<ul>
 				<li><Link to="/">jobs</Link></li>
 				<li><Link to="/flowbinders">flow binders</Link></li>
+				<li><Link to="/flows">flows</Link></li>
 			</ul>
 		</nav>
 	</div>

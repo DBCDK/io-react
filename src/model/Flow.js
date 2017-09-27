@@ -2,6 +2,8 @@ class FlowContent {
 	static fromJson(json) {
 		const content = new this();
 		content.name = json.name;
+		content.description = json.description;
+		content.timeOfFlowComponentUpdate = json.timeOfFlowComponentUpdate;
 		return content;
 	}
 }

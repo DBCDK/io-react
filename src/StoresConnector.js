@@ -71,6 +71,10 @@ class StoresConnector {
 		new HttpClient().with_callback(callback)
 			.get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
 	}
+	static getFlows(callback) {
+		new HttpClient().with_callback(callback)
+			.get(`${flowStoreBaseUrl}/${flows}`);
+	}
 	static getSink(sinkId, callback) {
 		new HttpClient().with_callback(callback)
 			.get(`${flowStoreBaseUrl}/${sinks}/${sinkId}`);
