@@ -5,8 +5,8 @@ const jobStoreBaseUrl = process.env.JOBSTORE_URL;
 const logStoreBaseUrl = process.env.LOGSTORE_URL;
 const flowStoreBaseUrl = process.env.FLOWSTORE_URL;
 
-const jobsSearches = "jobs/searches";
-const jobsCount = "jobs/searches/count";
+const jobsQueries = "jobs/queries";
+const jobsCount = "jobs/count";
 const itemsList = "jobs/chunks/items/searches";
 const itemsCount = "jobs/chunks/items/searches/count";
 const flowBinders = "binders";
@@ -27,16 +27,17 @@ const phaseToPath = function(phase) {
 
 class StoresConnector {
 	static listJobs(limit, offset, callback) {
-		const query = `{"filtering":[],"ordering":[{"field":"JOB_ID","sort":"DESC"}],"limit":${limit},"offset":${offset}}`;
+		const limitString = limit > 0 ? `LIMIT ${limit}` : "";
+		const query = `WITH job:id ORDER BY job:id DESC ${limitString} OFFSET ${offset}`
 		new HttpClient().with_data(query)
-			.add_headers({"Content-Type": "application/json"})
+			.add_headers({"Content-Type": "text/plain"})
 			.with_callback(callback)
-			.post(`${jobStoreBaseUrl}/${jobsSearches}`);
+			.post(`${jobStoreBaseUrl}/${jobsQueries}`);
 	}
 	static countJobs(callback) {
-		const query = `{"filtering":[],"ordering":[{"field":"JOB_ID","sort":"DESC"}],"limit":0,"offset":0}`;
+		const query = `WITH job:id`
 		new HttpClient().with_data(query)
-			.add_headers({"Content-Type": "application/json"})
+			.add_headers({"Content-Type": "text/plain"})
 			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${jobsCount}`);
 	}
