@@ -4,7 +4,6 @@ import request from "superagent";
 
 class HttpClient {
     constructor() {
-        this.callback = null;
         this.data = null;
         this.headers = {};
         this.query = {};
@@ -12,10 +11,6 @@ class HttpClient {
     }
     add_headers(headers) {
         this.headers = this._add_headers(headers, this.headers);
-        return this;
-    }
-    with_callback(callback) {
-        this.callback = callback;
         return this;
     }
     with_data(data) {
@@ -32,11 +27,11 @@ class HttpClient {
     }
     get(request_url) {
         this.method = "GET";
-        this.url_open(request_url);
+        return this.url_open(request_url);
     }
     post(request_url) {
         this.method = "POST";
-        this.url_open(request_url);
+        return this.url_open(request_url);
     }
     url_open(request_url) {
         let options = {
@@ -44,7 +39,7 @@ class HttpClient {
             method: this.method,
             headers: this.headers
         };
-        this._make_request(options);
+        return this._make_request(options);
     }
     _add_headers(src_headers, dest_headers) {
         const headers = Object.assign({}, dest_headers);
@@ -56,20 +51,21 @@ class HttpClient {
         return headers;
     }
     _make_request(options) {
-        const req = request(this.method, options.url)
-            .query(this.query)
-            .set(this.headers);
-        if(this.method === "POST" && this.data !== null) {
-            req.send(this.data);
-        }
-        req.end((err, res) => {
-            if(res !== undefined) {
-                this.callback(res.text, err);
-            } else {
-                this.callback(null, err);
-                console.error(err);
+        return new Promise((resolves, rejects) => {
+            const req = request(this.method, options.url)
+                .query(this.query)
+                .set(this.headers);
+            if(this.method === "POST" && this.data !== null) {
+                req.send(this.data);
             }
-        });
+            req.end((err, res) => {
+                if(err === null) {
+                    resolves(res.text);
+                } else {
+                    rejects(err);
+                }
+            });
+        })
     }
 }
 

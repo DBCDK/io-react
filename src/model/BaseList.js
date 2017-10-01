@@ -12,21 +12,19 @@ class BaseList {
 			offset: 0
 		};
 	}
-	static getSingleItem(endpoint, pathParams, callback) {
+	static getSingleItem(endpoint, pathParams) {
 		const path = new Path(endpoint);
 		if(pathParams !== null) {
 			pathParams.forEach((value, key) => path.bind(key, value));
 		}
-		new HttpClient().with_callback(callback)
-			.get(path.path);
+		return new HttpClient().get(path.path);
 	}
-	static getItems(endpoint, pathParams, queryObject, callback) {
+	static getItems(endpoint, pathParams, queryObject) {
 		const path = new Path(endpoint);
 		if(pathParams !== null) {
 			pathParams.forEach((value, key) => path.bind(key, value));
 		}
-		new HttpClient().with_callback(callback)
-			.withQuery(queryObject)
+		return new HttpClient().withQuery(queryObject)
 			.get(path.path);
 	}
 	static mapItemsFromJson(type, itemListJson) {

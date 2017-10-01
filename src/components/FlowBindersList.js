@@ -45,7 +45,7 @@ class FlowBindersList extends React.Component {
 		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		BaseList.getItems(Constants.flowBindersEndpoint, null, {}, json =>
+		BaseList.getItems(Constants.flowBindersEndpoint, null, {}).then(json =>
 			this.setState({items: BaseList.mapItemsFromJson(FlowBinder, json)})
 		);
 	}
@@ -56,19 +56,20 @@ class FlowBindersList extends React.Component {
 		return new Promise((resolve, reject) => {
 			const params = new Map();
 			params.set("flowId", flowBinder.content.flowId);
-			BaseList.getSingleItem(Constants.singleFlowEndpoint, params, jsonStr => {
-				const json = JSON.parse(jsonStr);
-				flowBinder.content.flow = Flow.fromJson(json);
-				this.setState({items: this.state.items});
-				resolve();
+			BaseList.getSingleItem(Constants.singleFlowEndpoint, params).then(
+				jsonStr => {
+					const json = JSON.parse(jsonStr);
+					flowBinder.content.flow = Flow.fromJson(json);
+					this.setState({items: this.state.items});
+					resolve();
 			});
 		});
 	}
-	updateSink(flowBinder, callback) {
+	updateSink(flowBinder) {
 		return new Promise((resolve, reject) => {
 			const params = new Map();
 			params.set("sinkId", flowBinder.content.sinkId);
-			BaseList.getSingleItem(Constants.sinksEndpoint, params, jsonStr => {
+			BaseList.getSingleItem(Constants.sinksEndpoint, params).then(jsonStr => {
 				const json = JSON.parse(jsonStr);
 				flowBinder.content.sink = Sink.fromJson(json);
 				this.setState({items: this.state.items});

@@ -93,39 +93,37 @@ class ItemInfo extends React.Component {
 			tabChangeListener: new TabChangeListener()
 		}
 	}
-	getJavascriptLog(item, callback) {
+	getJavascriptLog(item) {
 		const path = new Path(Constants.itemJavascriptLogEndpoint);
 		path.bind("jobId", item.jobId);
 		path.bind("chunkId", item.chunkId);
 		path.bind("itemId", item.id);
-		new HttpClient().with_callback(callback)
-			.get(path.path);
+		return new HttpClient().get(path.path);
 	}
-	getChunkItem(item, phase, callback) {
+	getChunkItem(item, phase) {
 		const path = new Path(Constants.chunkItemEndpoint);
 		path.bind("jobId", item.jobId);
 		path.bind("chunkId", item.chunkId);
 		path.bind("itemId", item.id);
 		path.bind("phase", phase);
-		new HttpClient().with_callback(callback)
-			.get(path.path);
+		return new HttpClient().get(path.path);
 	}
 	onCurrentItemChanged(item) {
-		this.getJavascriptLog(item, log => {
+		this.getJavascriptLog(item).then(log => {
 			this.state.itemContentChangeListener.onItemContentChanged(
 				ItemInfo.TYPES.JAVASCRIPT_LOG, log);
 		});
-		this.getChunkItem(item, State.LIFECYCLE.PARTITIONING, json => {
+		this.getChunkItem(item, State.LIFECYCLE.PARTITIONING).then(json => {
 			const addiRecord = addiRecordFromChunkItem(json, "base64");
 			this.state.itemContentChangeListener.onItemContentChanged(
 				ItemInfo.TYPES.INPUT_RECORD, addiRecord.toString("utf8"));
 		});
-		this.getChunkItem(item, State.LIFECYCLE.PROCESSING, json => {
+		this.getChunkItem(item, State.LIFECYCLE.PROCESSING).then(json => {
 			const addiRecord = addiRecordFromChunkItem(json, "base64");
 			this.state.itemContentChangeListener.onItemContentChanged(
 			ItemInfo.TYPES.OUTPUT_RECORD, addiRecord.toString("utf8"));
 		});
-		this.getChunkItem(item, State.LIFECYCLE.DELIVERING, json => {
+		this.getChunkItem(item, State.LIFECYCLE.DELIVERING).then(json => {
 			const addiRecord = addiRecordFromChunkItem(json, "base64");
 			this.state.itemContentChangeListener.onItemContentChanged(
 			ItemInfo.TYPES.SINK_RESULT, addiRecord.toString("utf8"));

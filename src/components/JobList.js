@@ -49,14 +49,16 @@ class JobList extends React.Component {
 		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		BaseList.getSingleItem(Constants.jobsCountEndpoint, null, json =>
-			this.setState({count: parseInt(json)}));
+		BaseList.getSingleItem(Constants.jobsCountEndpoint, null).then(json =>
+			this.setState({count: parseInt(json)})
+		);
 		this.updateJobList();
 	}
 	updateJobList() {
 		const query = {limit: this.state.limit, offset: this.state.offset};
-		BaseList.getItems(Constants.jobsListEndpoint, null, query, json =>
-			this.setState({items: BaseList.mapItemsFromJson(Job, json)}));
+		BaseList.getItems(Constants.jobsListEndpoint, null, query).then(json =>
+			this.setState({items: BaseList.mapItemsFromJson(Job, json)})
+		);
 	}
 	onBackClicked() {
 		if(this.state.offset >= this.state.limit) {

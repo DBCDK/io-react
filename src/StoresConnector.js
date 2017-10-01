@@ -26,60 +26,52 @@ const phaseToPath = function(phase) {
 };
 
 class StoresConnector {
-	static listJobs(limit, offset, callback) {
+	static listJobs(limit, offset) {
 		const limitString = limit > 0 ? `LIMIT ${limit}` : "";
 		const query = `WITH job:id ORDER BY job:id DESC ${limitString} OFFSET ${offset}`
-		new HttpClient().with_data(query)
+		return new HttpClient().with_data(query)
 			.add_headers({"Content-Type": "text/plain"})
-			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${jobsQueries}`);
 	}
-	static countJobs(callback) {
+	static countJobs() {
 		const query = `WITH job:id`
-		new HttpClient().with_data(query)
+		return new HttpClient().with_data(query)
 			.add_headers({"Content-Type": "text/plain"})
-			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${jobsCount}`);
 	}
-	static getJavascriptLog(jobId, chunkId, itemId, callback) {
-		new HttpClient().with_callback(callback)
-			.get(`${logStoreBaseUrl}/logentries/jobs/${jobId}/chunks/${chunkId}/items/${itemId}`)
+	static getJavascriptLog(jobId, chunkId, itemId) {
+		return new HttpClient().get(
+			`${logStoreBaseUrl}/logentries/jobs/${jobId}/chunks/${chunkId}/items/${itemId}`)
 	}
-	static getChunkItem(jobId, chunkId, itemId, phase, callback) {
+	static getChunkItem(jobId, chunkId, itemId, phase) {
 		const path = phaseToPath(phase);
-		new HttpClient().with_callback(callback)
-			.get(`${jobStoreBaseUrl}/jobs/${jobId}/chunks/${chunkId}/items/${itemId}/${path}`);
+		return new HttpClient().get(
+			`${jobStoreBaseUrl}/jobs/${jobId}/chunks/${chunkId}/items/${itemId}/${path}`);
 	}
-	static listItems(jobId, limit, offset, callback) {
+	static listItems(jobId, limit, offset) {
 		const limitString = limit > 0 ? `LIMIT ${limit}` : "";
 		const query = `item:jobid = ${jobId} ${limitString} OFFSET ${offset}`
-		new HttpClient().with_data(query)
+		return new HttpClient().with_data(query)
 			.add_headers({"Content-Type": "text/plain"})
-			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${itemsList}`);
 	}
-	static countItems(jobId, callback) {
+	static countItems(jobId) {
 		const query = `item:jobid = ${jobId}`
-		new HttpClient().with_data(query)
+		return new HttpClient().with_data(query)
 			.add_headers({"Content-Type": "text/plain"})
-			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${itemsCount}`);
 	}
-	static getFlowBinders(callback) {
-		new HttpClient().with_callback(callback)
-			.get(`${flowStoreBaseUrl}/${flowBinders}`);
+	static getFlowBinders() {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${flowBinders}`);
 	}
-	static getFlow(flowId, callback) {
-		new HttpClient().with_callback(callback)
-			.get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
+	static getFlow(flowId) {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
 	}
-	static getFlows(callback) {
-		new HttpClient().with_callback(callback)
-			.get(`${flowStoreBaseUrl}/${flows}`);
+	static getFlows() {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${flows}`);
 	}
-	static getSink(sinkId, callback) {
-		new HttpClient().with_callback(callback)
-			.get(`${flowStoreBaseUrl}/${sinks}/${sinkId}`);
+	static getSink(sinkId) {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${sinks}/${sinkId}`);
 	}
 }
 

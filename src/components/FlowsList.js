@@ -30,7 +30,7 @@ class FlowsList extends React.Component {
 		this.state = BaseList.getBaseListStateObject();
 	}
 	componentWillMount() {
-		BaseList.getItems(Constants.flowsEndpoint, null, {}, json =>
+		BaseList.getItems(Constants.flowsEndpoint, null, {}).then(json =>
 			this.setState({items: BaseList.mapItemsFromJson(Flow, json)})
 		);
 	}
