@@ -7,8 +7,8 @@ const flowStoreBaseUrl = process.env.FLOWSTORE_URL;
 
 const jobsQueries = "jobs/queries";
 const jobsCount = "jobs/count";
-const itemsList = "jobs/chunks/items/searches";
-const itemsCount = "jobs/chunks/items/searches/count";
+const itemsList = "items/queries";
+const itemsCount = "items/count";
 const flowBinders = "binders";
 const flows = "flows";
 const sinks = "sinks";
@@ -51,16 +51,17 @@ class StoresConnector {
 			.get(`${jobStoreBaseUrl}/jobs/${jobId}/chunks/${chunkId}/items/${itemId}/${path}`);
 	}
 	static listItems(jobId, limit, offset, callback) {
-		const query = `{"filtering":[{"not":false,"members":[{"filter":{"field":"JOB_ID","operator":"EQUAL","value":"${jobId}"},"logicalOperator":"AND"}]}],"ordering":[],"limit":${limit},"offset":${offset}}`
+		const limitString = limit > 0 ? `LIMIT ${limit}` : "";
+		const query = `item:jobid = ${jobId} ${limitString} OFFSET ${offset}`
 		new HttpClient().with_data(query)
-			.add_headers({"Content-Type": "application/json"})
+			.add_headers({"Content-Type": "text/plain"})
 			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${itemsList}`);
 	}
 	static countItems(jobId, callback) {
-		const query = `{"filtering":[{"not":false,"members":[{"filter":{"field":"JOB_ID","operator":"EQUAL","value":"${jobId}"},"logicalOperator":"AND"}]}],"ordering":[],"limit":0,"offset":0}`
+		const query = `item:jobid = ${jobId}`
 		new HttpClient().with_data(query)
-			.add_headers({"Content-Type": "application/json"})
+			.add_headers({"Content-Type": "text/plain"})
 			.with_callback(callback)
 			.post(`${jobStoreBaseUrl}/${itemsCount}`);
 	}
