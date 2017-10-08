@@ -18,57 +18,64 @@ app.get(Constants.jobsListEndpoint, (req, res) => {
 	const offset = req.query.offset !== undefined ? req.query.offset : 0;
 	StoresConnector.listJobs(limit, offset).then(json => {
 		res.status(200).send(json);
-	});
+	}).catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.jobsCountEndpoint, (req, res) => {
 	StoresConnector.countJobs().then(json => {
 		res.status(200).send(json);
-	});
+	}).catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.itemsListEndpoint, (req, res) => {
 	const limit = req.query.limit !== undefined ? req.query.limit : 0;
 	const offset = req.query.offset !== undefined ? req.query.offset : 0;
 	StoresConnector.listItems(req.params.jobId, limit, offset).then(json =>
-		res.status(200).send(json));
+		res.status(200).send(json))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.itemsCountEndpoint, (req, res) => {
-	StoresConnector.countItems(req.params.jobId).then(json => res.status(200).send(json));
+	StoresConnector.countItems(req.params.jobId).then(
+		json => res.status(200).send(json))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.itemJavascriptLogEndpoint, (req, res) => {
 	StoresConnector.getJavascriptLog(req.params.jobId, req.params.chunkId,
-		req.params.itemId).then(log => res.status(200).send(log));
+		req.params.itemId).then(log => res.status(200).send(log))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.chunkItemEndpoint, (req, res) => {
 	StoresConnector.getChunkItem(req.params.jobId, req.params.chunkId,
 		req.params.itemId, req.params.phase).then(chunkItem => res.status(200)
-			.send(chunkItem));
+			.send(chunkItem))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.flowBindersEndpoint, (req, res) => {
-	StoresConnector.getFlowBinders().then(json => res.status(200).send(json));
+	StoresConnector.getFlowBinders().then(
+		json => res.status(200).send(json))
+	.catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.singleFlowEndpoint, (req, res) => {
 	StoresConnector.getFlow(req.params.flowId).then(json =>
 		res.status(200).send(json)
-	);
+	).catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.sinksEndpoint, (req, res) => {
 	StoresConnector.getSink(req.params.sinkId).then(json =>
 		res.status(200).send(json)
-	);
+	).catch(err => res.status(500).send(err));
 });
 
 app.get(Constants.flowsEndpoint, (req, res) => {
 	StoresConnector.getFlows().then(json => {
 		res.status(200).send(json);
-	});
+	}).catch(err => res.status(500).send(err));
 });
 
 // handle the rest of the routing in the client
