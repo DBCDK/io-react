@@ -70,10 +70,6 @@ class ItemTabContent extends React.Component {
 }
 
 class ItemInfoEntry extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {type: this.props.type};
-	}
 	onClick() {
 		this.props.onClick(this);
 	}
@@ -130,7 +126,7 @@ class ItemInfo extends React.Component {
 		});
 	}
 	onContentChange(target) {
-		this.state.tabChangeListener.onTabChanged(target.state.type);
+		this.state.tabChangeListener.onTabChanged(target.props.type);
 	}
 	render() {
 		return (
