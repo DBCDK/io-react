@@ -1,6 +1,7 @@
 import React from "react";
 
 import AddiRecord from "../model/AddiRecord";
+import AddiRecordException from "../model/AddiRecordException";
 import ChunkItem from "../model/ChunkItem";
 import Constants from "../Constants";
 import HttpClient from "../HttpClient";
@@ -11,7 +12,18 @@ import State from "../model/State";
 const addiRecordFromChunkItem = function(chunkItemJson, encoding) {
 	const json = JSON.parse(chunkItemJson);
 	const chunkItem = ChunkItem.fromJson(json);
-	return new AddiRecord(chunkItem.data, chunkItem.encoding, encoding);
+	try {
+		const addiRecord = new AddiRecord(chunkItem.data, chunkItem.encoding,
+			encoding);
+		return `${addiRecord.metadata}\n${addiRecord.data}`;
+	} catch(e) {
+		if(!(e instanceof AddiRecordException)) {
+			throw e;
+		} else {
+			return new Buffer.from(chunkItem.data, encoding).toString(
+				chunkItem.encoding);
+		}
+	}
 }
 
 class ItemContentListener extends Listener {
