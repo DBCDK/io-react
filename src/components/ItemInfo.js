@@ -110,20 +110,19 @@ class ItemInfo extends React.Component {
 				ItemInfo.TYPES.JAVASCRIPT_LOG, log);
 		});
 		this.getChunkItem(item, State.LIFECYCLE.PARTITIONING).then(json => {
-			const addiRecord = addiRecordFromChunkItem(json, "base64");
-			this.state.itemContentChangeListener.onItemContentChanged(
-				ItemInfo.TYPES.INPUT_RECORD, addiRecord.toString("utf8"));
+			this.setItemTabContentFromChunkItem(json, ItemInfo.TYPES.INPUT_RECORD);
 		});
 		this.getChunkItem(item, State.LIFECYCLE.PROCESSING).then(json => {
-			const addiRecord = addiRecordFromChunkItem(json, "base64");
-			this.state.itemContentChangeListener.onItemContentChanged(
-			ItemInfo.TYPES.OUTPUT_RECORD, addiRecord.toString("utf8"));
+			this.setItemTabContentFromChunkItem(json, ItemInfo.TYPES.OUTPUT_RECORD);
 		});
 		this.getChunkItem(item, State.LIFECYCLE.DELIVERING).then(json => {
-			const addiRecord = addiRecordFromChunkItem(json, "base64");
-			this.state.itemContentChangeListener.onItemContentChanged(
-			ItemInfo.TYPES.SINK_RESULT, addiRecord.toString("utf8"));
+			this.setItemTabContentFromChunkItem(json, ItemInfo.TYPES.SINK_RESULT);
 		});
+	}
+	setItemTabContentFromChunkItem(json, type) {
+		const addiRecord = addiRecordFromChunkItem(json, "base64");
+		this.state.itemContentChangeListener.onItemContentChanged(
+			type, addiRecord.toString("utf8"));
 	}
 	onContentChange(target) {
 		this.state.tabChangeListener.onTabChanged(target.props.type);
