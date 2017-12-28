@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import BaseList from "../model/BaseList";
 import Constants from "../Constants";
 import DateTime from "../util/DateTime";
+import FilterView from "./FilterView";
 import Job from "../model/Job";
 import Pager from "./Pager";
 
@@ -90,6 +91,7 @@ class JobList extends React.Component {
 		return (
 			<div>
 				<h1>jobs</h1>
+				<FilterView/>
 				<Pager pos={this.state.offset} interval={this.state.limit} total={this.state.count} onBackClicked={this.onBackClicked.bind(this)} onForwardClicked={this.onForwardClicked.bind(this)} onBeginningClicked={this.onBeginningClicked.bind(this)} onEndClicked={this.onEndClicked.bind(this)}/>
 				{/* class="table" is defined by bootstrap css*/}
 				<table className="table job-list">
