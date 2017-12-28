@@ -13,9 +13,8 @@ const addiRecordFromChunkItem = function(chunkItemJson, encoding) {
 	const json = JSON.parse(chunkItemJson);
 	const chunkItem = ChunkItem.fromJson(json);
 	try {
-		const addiRecord = new AddiRecord(chunkItem.data, chunkItem.encoding,
+		return new AddiRecord(chunkItem.data, chunkItem.encoding,
 			encoding);
-		return `${addiRecord.metadata}\n${addiRecord.data}`;
 	} catch(e) {
 		if(!(e instanceof AddiRecordException)) {
 			throw e;
@@ -75,7 +74,7 @@ class ItemTabContent extends React.Component {
 	render() {
 		return (
 			<div>
-				<p>{this.state.content[this.state.currentTab]}</p>
+				<pre>{this.state.content[this.state.currentTab]}</pre>
 			</div>
 		)
 	}
@@ -134,7 +133,7 @@ class ItemInfo extends React.Component {
 	setItemTabContentFromChunkItem(json, type) {
 		const addiRecord = addiRecordFromChunkItem(json, "base64");
 		this.state.itemContentChangeListener.onItemContentChanged(
-			type, addiRecord.toString("utf8"));
+			type, addiRecord.toString());
 	}
 	onContentChange(target) {
 		this.state.tabChangeListener.onTabChanged(target.props.type);

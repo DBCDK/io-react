@@ -50,8 +50,25 @@ class AddiRecord {
 		} while(this.pos < this.buffer.length)
 		return Buffer.from(bytes).toString(this.encoding);
 	}
+	jsonToString(json) {
+		return JSON.stringify(JSON.parse(json), null, 2);
+	}
+	// temporarily split on >< until more sophisticated xml printing
+	// (and syntax highlighting)
+	xmlToString(xmlString) {
+		return xmlString.split(/>\s*</).join(">\n<");
+	}
+	prettify(data) {
+		const dataTrimmed = data.trim();
+		if(dataTrimmed[0] === "{" && dataTrimmed[dataTrimmed.length-1] === "}") {
+			return this.jsonToString(data);
+		} else {
+			return this.xmlToString(data);
+		}
+		return data;
+	}
 	toString() {
-		return this.buffer.toString(this.encoding);
+		return this.prettify(this.metadata) + "\n\n" + this.prettify(this.data);
 	}
 }
 
