@@ -1,6 +1,7 @@
 import React from "react";
 
 import RecordSplitterConstants from "../model/RecordSplitterConstants";
+import SubmittersView from "./SubmittersView";
 
 class BaseSelect extends React.Component {
 	render() {
@@ -27,18 +28,6 @@ class SinkSelect extends React.Component {
 	render() {
 		return (
 			<BaseSelect name="sink" value="sink"/>
-		)
-	}
-}
-
-class SubmitterSelect extends React.Component {
-	render() {
-		return (
-			<div className="form-group">
-				<label htmlFor="submitters">submitters</label>
-				<select multiple>
-				</select>
-			</div>
 		)
 	}
 }
@@ -92,7 +81,7 @@ class FlowBinderEdit extends React.Component {
 					</select>
 				</div>
 				<RecordSplitterSelect/>
-				<SubmitterSelect/>
+				<SubmittersView/>
 				<FlowSelect/>
 				<SinkSelect/>
 				<input type="submit" value="save"/>
