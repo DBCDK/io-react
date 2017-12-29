@@ -1,19 +1,34 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import PropTypes from "prop-types";
 
 import BaseList from "../model/BaseList";
 import Constants from "../Constants";
 import Flow from "../model/Flow";
 import FlowBinder from "../model/FlowBinder";
 import Sink from "../model/Sink";
+import SubmittersHandler from "../model/SubmittersHandler";
+import SubmittersView from "./SubmittersView";
 
 class FlowBinderElement extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			submitters: []
+		};
+	}
 	componentDidMount() {
 		this.props.updateCallback(this.props.flowBinder);
+		this.showSubmitter();
 	}
 	showSubmitter() {
-		// temporarily just show the first submitter
-		return this.props.flowBinder.content.submitterIds[0];
+		for(let i = 0; i < this.props.flowBinder.content.submitterIds.length; i++) {
+			this.props.submittersHandler.getSubmitter(this.props.flowBinder.content
+					.submitterIds[i]).then(submitter => {
+				this.state.submitters.push(submitter);
+				this.setState({submitters: this.state.submitters});
+			});
+		}
 	}
 	getQueueProvider(sinkId) {
 		return "queue provider";
@@ -29,7 +44,7 @@ class FlowBinderElement extends React.Component {
 				<td>{this.props.flowBinder.content.charset}</td>
 				<td>{this.props.flowBinder.content.destination}</td>
 				<td>{this.props.flowBinder.content.recordSplitter}</td>
-				<td>{this.showSubmitter()}</td>
+				<td><SubmittersView submitters={this.state.submitters}/></td>
 				<td>{this.props.flowBinder.content.flow.content.name}</td>
 				<td>{this.props.flowBinder.content.sink.content.name}</td>
 				<td>{this.getQueueProvider(this.props.flowBinder.sinkId)}</td>
@@ -38,6 +53,14 @@ class FlowBinderElement extends React.Component {
 		)
 	}
 }
+
+FlowBinderElement.propTypes = {
+	submittersHandler: PropTypes.instanceOf(SubmittersHandler)
+};
+
+FlowBinderElement.defaultProps = {
+	submittersHandler: new SubmittersHandler()
+};
 
 class FlowBindersList extends React.Component {
 	constructor(props) {
