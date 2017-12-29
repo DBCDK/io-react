@@ -81,7 +81,7 @@ class FlowBinderEdit extends React.Component {
 					</select>
 				</div>
 				<RecordSplitterSelect/>
-				<SubmittersView/>
+				<SubmittersView withLabel={true}/>
 				<FlowSelect/>
 				<SinkSelect/>
 				<input type="submit" value="save"/>
