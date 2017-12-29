@@ -12,6 +12,7 @@ const itemsCount = "items/count";
 const flowBinders = "binders";
 const flows = "flows";
 const sinks = "sinks";
+const submitters = "submitters";
 
 const phaseToPath = function(phase) {
 	switch(phase) {
@@ -72,6 +73,9 @@ class StoresConnector {
 	}
 	static getSink(sinkId) {
 		return new HttpClient().get(`${flowStoreBaseUrl}/${sinks}/${sinkId}`);
+	}
+	static getSubmitter(submitterId) {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${submitters}/${submitterId}`);
 	}
 }
 

@@ -78,6 +78,12 @@ app.get(Constants.flowsEndpoint, (req, res) => {
 	}).catch(err => res.status(500).send(err));
 });
 
+app.get(Constants.submittersEndpoint, (req, res) => {
+	StoresConnector.getSubmitter(req.params.submitterId).then(json => {
+		res.status(200).send(json);
+	}).catch(err => res.status(500).send(err));
+});
+
 // handle the rest of the routing in the client
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "/static/index.html"));
