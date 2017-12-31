@@ -10,13 +10,9 @@ import Sink from "../model/Sink";
 import SubmittersHandler from "../model/SubmittersHandler";
 import SubmittersView from "./SubmittersView";
 
+import {addSubmitter} from "../reducers";
+
 class FlowBinderElement extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			submitters: []
-		};
-	}
 	componentDidMount() {
 		this.props.updateCallback(this.props.flowBinder);
 		this.showSubmitter();
@@ -25,8 +21,8 @@ class FlowBinderElement extends React.Component {
 		for(let i = 0; i < this.props.flowBinder.content.submitterIds.length; i++) {
 			this.props.submittersHandler.getSubmitter(this.props.flowBinder.content
 					.submitterIds[i]).then(submitter => {
-				this.state.submitters.push(submitter);
-				this.setState({submitters: this.state.submitters});
+				this.context.store.dispatch(addSubmitter(submitter,
+					this.props.flowBinder.id));
 			});
 		}
 	}
@@ -44,7 +40,7 @@ class FlowBinderElement extends React.Component {
 				<td>{this.props.flowBinder.content.charset}</td>
 				<td>{this.props.flowBinder.content.destination}</td>
 				<td>{this.props.flowBinder.content.recordSplitter}</td>
-				<td><SubmittersView submitters={this.state.submitters}/></td>
+				<td><SubmittersView flowBinderId={this.props.flowBinder.id}/></td>
 				<td>{this.props.flowBinder.content.flow.content.name}</td>
 				<td>{this.props.flowBinder.content.sink.content.name}</td>
 				<td>{this.getQueueProvider(this.props.flowBinder.sinkId)}</td>
@@ -60,6 +56,10 @@ FlowBinderElement.propTypes = {
 
 FlowBinderElement.defaultProps = {
 	submittersHandler: new SubmittersHandler()
+};
+
+FlowBinderElement.contextTypes = {
+	store: PropTypes.object.isRequired
 };
 
 class FlowBindersList extends React.Component {
