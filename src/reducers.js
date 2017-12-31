@@ -20,7 +20,10 @@ export const submitters = (state = new Map(), action) => {
 				action.submitter
 			]);
 		} else {
-			submitters.get(action.id).push(action.submitter);
+			if(submitters.get(action.id).map(s => s.id).indexOf(
+					action.submitter.id) === -1) {
+				submitters.get(action.id).push(action.submitter);
+			}
 		}
 		return submitters;
 	default:
