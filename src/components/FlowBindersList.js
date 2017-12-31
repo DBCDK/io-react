@@ -10,7 +10,11 @@ import Sink from "../model/Sink";
 import SubmittersHandler from "../model/SubmittersHandler";
 import SubmittersView from "./SubmittersView";
 
-import {addSubmitter} from "../reducers";
+import {
+	addFlowBinders,
+	addSubmitter,
+	updateFlowbinder
+} from "../reducers";
 
 class FlowBinderElement extends React.Component {
 	componentDidMount() {
@@ -63,14 +67,16 @@ FlowBinderElement.contextTypes = {
 };
 
 class FlowBindersList extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = BaseList.getBaseListStateObject();
-	}
 	componentWillMount() {
+		this.unsubscribe = this.context.store.subscribe(
+			this.forceUpdate.bind(this));
 		BaseList.getItems(Constants.flowBindersEndpoint, null, {}).then(json =>
-			this.setState({items: BaseList.mapItemsFromJson(FlowBinder, json)})
+			this.context.store.dispatch(addFlowBinders(BaseList.mapItemsFromJson(
+				FlowBinder, json)))
 		);
+	}
+	componentWillUnmount() {
+		this.unsubscribe();
 	}
 	updateCallback(flowBinder) {
 		this.updateSink(flowBinder).then(this.updateFlow(flowBinder));
@@ -83,7 +89,7 @@ class FlowBindersList extends React.Component {
 				jsonStr => {
 					const json = JSON.parse(jsonStr);
 					flowBinder.content.flow = Flow.fromJson(json);
-					this.setState({items: this.state.items});
+					this.context.store.dispatch(updateFlowbinder(flowBinder));
 					resolve();
 			});
 		});
@@ -95,12 +101,13 @@ class FlowBindersList extends React.Component {
 			BaseList.getSingleItem(Constants.sinksEndpoint, params).then(jsonStr => {
 				const json = JSON.parse(jsonStr);
 				flowBinder.content.sink = Sink.fromJson(json);
-				this.setState({items: this.state.items});
+				this.context.store.dispatch(updateFlowbinder(flowBinder));
 				resolve();
 			});
 		});
 	}
 	render() {
+		const {flowBinders} = this.context.store.getState();
 		return (
 			<div>
 				<table className="table">
@@ -122,7 +129,7 @@ class FlowBindersList extends React.Component {
 					</thead>
 					<tbody>
 					{
-						this.state.items.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder} updateCallback={this.updateCallback.bind(this)}/>)
+						flowBinders.map((flowBinder, i) => <FlowBinderElement key={i} flowBinder={flowBinder} updateCallback={this.updateCallback.bind(this)}/>)
 					}
 					</tbody>
 				</table>
@@ -130,5 +137,9 @@ class FlowBindersList extends React.Component {
 		)
 	}
 }
+
+FlowBindersList.contextTypes = {
+	store: PropTypes.object.isRequired
+};
 
 export default FlowBindersList;

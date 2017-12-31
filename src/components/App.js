@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {createStore} from "redux";
+import {combineReducers, createStore} from "redux";
 
 import Main from "./Main";
 import Sidebar from "./Sidebar";
-import {initialState, submitters} from "../reducers";
+import {flowBinders, initialState, submitters} from "../reducers";
 
 class App extends React.Component {
 	getChildContext() {
@@ -27,7 +27,7 @@ App.propTypes = {
 };
 
 App.defaultProps = {
-	store: createStore(submitters, initialState)
+	store: createStore(combineReducers({flowBinders, submitters}), initialState)
 };
 
 App.childContextTypes = {
