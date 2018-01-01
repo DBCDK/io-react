@@ -12,7 +12,7 @@ class SubmittersView extends React.Component {
 		return (
 			<div className="form-group">
 				{this.props.withLabel ? <label htmlFor="submitters">submitters</label> : <noop/>}
-				<select multiple>
+				<select multiple name="submitters">
 					{submitters.map((submitter, index) => <option key={index} value={submitter.id}>{submitter.toString()}</option>)}
 				</select>
 			</div>
