@@ -6,4 +6,4 @@ export default {
 	ISO2709: "ISO2709",
 	RR_MARC_XML: "RR_MARC_XML",
 	XML: "XML"
-}
+};
