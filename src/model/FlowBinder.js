@@ -26,7 +26,6 @@ class FlowBinder {
 		const flowBinder = new this();
 		flowBinder.id = json.id;
 		flowBinder.version = json.version;
-		flowBinder.content = null;
 		flowBinder.content = FlowBinderContent.fromJson(json.content);
 		return flowBinder;
 	}
