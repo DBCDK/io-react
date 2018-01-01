@@ -33,7 +33,11 @@ class FlowSelect extends React.Component {
 class SinkSelect extends React.Component {
 	render() {
 		return (
-			<BaseSelect name="sink" value="sink"/>
+			<BaseSelect name="sink" value="sink" selected={this.props.sink.id}>
+			{
+				this.props.allSinks.map((sink, i) => <option key={i} value={sink.id}>{sink.content.name}</option>)
+			}
+			</BaseSelect>
 		)
 	}
 }
@@ -73,6 +77,12 @@ class FlowBinderEdit extends React.Component {
 		).filter(item => flowHashMap.has(item.id) ?
 			false : (flowHashMap.set(item.id))
 		);
+		const sinkHashMap = new Map();
+		const sinks = this.context.store.getState().flowBinders.map(f =>
+			f.content.sink
+		).filter(item => sinkHashMap.has(item.id) ?
+			false : (sinkHashMap.set(item.id))
+		);
 		return (
 			<form>
 				<div className="form-group">
@@ -110,7 +120,7 @@ class FlowBinderEdit extends React.Component {
 				<RecordSplitterSelect recordSplitter={flowBinder.content.recordSplitter}/>
 				<SubmittersView withLabel={true} flowBinderId={flowBinder.id}/>
 				<FlowSelect allFlows={flows} flow={flowBinder.content.flow}/>
-				<SinkSelect/>
+				<SinkSelect allSinks={sinks} sink={flowBinder.content.sink}/>
 				<input type="submit" value="save"/>
 			</form>
 		)
