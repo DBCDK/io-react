@@ -65,6 +65,10 @@ class StoresConnector {
 	static getFlowBinders() {
 		return new HttpClient().get(`${flowStoreBaseUrl}/${flowBinders}`);
 	}
+	static getFlowBinderById(flowBinderId) {
+		return new HttpClient().get(
+			`${flowStoreBaseUrl}/${flowBinders}/${flowBinderId}`)
+	}
 	static getFlow(flowId) {
 		return new HttpClient().get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
 	}

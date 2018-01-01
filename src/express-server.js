@@ -60,6 +60,12 @@ app.get(Constants.flowBindersEndpoint, (req, res) => {
 	.catch(err => res.status(500).send(err));
 });
 
+app.get(Constants.singleFlowBinderEndpoint, (req, res) => {
+	StoresConnector.getFlowBinderById(req.params.flowBinderId).then(json =>
+		res.status(200).send(json)
+	).catch(err => res.status(500).send(err));
+});
+
 app.get(Constants.singleFlowEndpoint, (req, res) => {
 	StoresConnector.getFlow(req.params.flowId).then(json =>
 		res.status(200).send(json)
