@@ -17,7 +17,7 @@ class SubmittersHandler {
 			} else {
 				const params = new Map();
 				params.set("submitterId", submitterId);
-				BaseList.getSingleItem(Constants.submittersEndpoint, params).then(
+				BaseList.getSingleItem(Constants.submitterEndpoint, params).then(
 						jsonStr => {
 					const json = JSON.parse(jsonStr);
 					const submitter = Submitter.fromJson(json);

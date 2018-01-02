@@ -87,7 +87,7 @@ app.get(Constants.flowsEndpoint, (req, res) => {
 	}).catch(err => res.status(500).send(err));
 });
 
-app.get(Constants.submittersEndpoint, (req, res) => {
+app.get(Constants.submitterEndpoint, (req, res) => {
 	StoresConnector.getSubmitter(req.params.submitterId).then(json => {
 		res.status(200).send(json);
 	}).catch(err => res.status(500).send(err));

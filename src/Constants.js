@@ -10,7 +10,7 @@ const createFlowBinderEndpoint = "/flowbinders/create";
 const flowsEndpoint = "/flowsList";
 const singleFlowEndpoint = "/flows/:flowId";
 const sinksEndpoint = "/sinks/:sinkId";
-const submittersEndpoint = "/submitters/:submitterId";
+const submitterEndpoint = "/submitters/:submitterId";
 
 class JobConstants {
 	static get jobsListEndpoint() {
@@ -49,8 +49,8 @@ class JobConstants {
 	static get sinksEndpoint() {
 		return sinksEndpoint;
 	}
-	static get submittersEndpoint() {
-		return submittersEndpoint;
+	static get submitterEndpoint() {
+		return submitterEndpoint;
 	}
 }
 
