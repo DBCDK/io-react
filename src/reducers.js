@@ -11,21 +11,13 @@ export const flowBinders = (state = [], action) => {
 	}
 };
 
-export const submitters = (state = new Map(), action) => {
+export const submitters = (state = [], action) => {
 	switch(action.type) {
 	case ACTION_TYPES.ADD_SUBMITTER:
-		const submitters = new Map(state);
-		if(!submitters.has(action.id)) {
-			submitters.set(action.id, [
-				action.submitter
-			]);
-		} else {
-			if(submitters.get(action.id).map(s => s.id).indexOf(
-					action.submitter.id) === -1) {
-				submitters.get(action.id).push(action.submitter);
-			}
-		}
-		return submitters;
+		return [
+			...state,
+			action.submitter
+		];
 	default:
 		return state;
 	}
@@ -45,10 +37,9 @@ export const updateFlowbinder = (flowBinder) => (
 	}
 );
 
-export const addSubmitter = (submitter, flowbinderId) => (
+export const addSubmitter = submitter => (
 	{
 		type: ACTION_TYPES.ADD_SUBMITTER,
-		id: flowbinderId,
 		submitter: submitter
 	}
 );
@@ -63,5 +54,5 @@ export {ACTION_TYPES};
 
 export const initialState = {
 	flowBinders: [],
-	submitters: new Map()
+	submitters: []
 };
