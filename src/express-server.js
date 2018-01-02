@@ -93,6 +93,12 @@ app.get(Constants.submitterEndpoint, (req, res) => {
 	}).catch(err => res.status(500).send(err));
 });
 
+app.get(Constants.submittersEndpoint, (req, res) => {
+	StoresConnector.getSubmitters().then(json =>
+		res.status(200).send(json)
+	).catch(err => res.status(500).send(err));
+});
+
 app.post(Constants.createFlowBinderEndpoint, (req, res) => {
 	StoresConnector.createFlowBinder(req.body).then(json => {
 		res.status(200).send(json)

@@ -11,6 +11,7 @@ const flowsEndpoint = "/flowsList";
 const singleFlowEndpoint = "/flows/:flowId";
 const sinksEndpoint = "/sinks/:sinkId";
 const submitterEndpoint = "/submitters/:submitterId";
+const submittersEndpoint = "/submitters";
 
 class JobConstants {
 	static get jobsListEndpoint() {
@@ -51,6 +52,9 @@ class JobConstants {
 	}
 	static get submitterEndpoint() {
 		return submitterEndpoint;
+	}
+	static get submittersEndpoint() {
+		return submittersEndpoint;
 	}
 }
 

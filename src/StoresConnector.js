@@ -86,6 +86,9 @@ class StoresConnector {
 	static getSubmitter(submitterId) {
 		return new HttpClient().get(`${flowStoreBaseUrl}/${submitters}/${submitterId}`);
 	}
+	static getSubmitters() {
+		return new HttpClient().get(`${flowStoreBaseUrl}/${submitters}`);
+	}
 }
 
 export default StoresConnector;
