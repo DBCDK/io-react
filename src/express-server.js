@@ -1,3 +1,4 @@
+import BodyParser from "body-parser";
 import Express from "express";
 import {Server} from "http";
 import path from "path";
@@ -10,6 +11,8 @@ import StoresConnector from "./StoresConnector";
 const app = new Express();
 const server = new Server(app);
 app.use(Express.static(path.join(__dirname, "static")));
+// necessary for parsing POST request bodies
+app.use(BodyParser.json());
 
 // https://expressjs.com/en/4x/api.html
 
@@ -87,6 +90,12 @@ app.get(Constants.flowsEndpoint, (req, res) => {
 app.get(Constants.submittersEndpoint, (req, res) => {
 	StoresConnector.getSubmitter(req.params.submitterId).then(json => {
 		res.status(200).send(json);
+	}).catch(err => res.status(500).send(err));
+});
+
+app.post(Constants.createFlowBinderEndpoint, (req, res) => {
+	StoresConnector.createFlowBinder(req.body).then(json => {
+		res.status(200).send(json)
 	}).catch(err => res.status(500).send(err));
 });
 
