@@ -23,7 +23,7 @@ class SubmittersHandler {
 					const submitter = Submitter.fromJson(json);
 					this.submittersCache.set(submitterId, submitter);
 					resolve(submitter);
-				});
+				}).catch(err => reject(err));
 			}
 		});
 	}
