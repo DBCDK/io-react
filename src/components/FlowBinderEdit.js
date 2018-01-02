@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import FlowBinder from "../model/FlowBinder";
+import {FlowBinderContent} from "../model/FlowBinder";
 import RecordSplitterConstants from "../model/RecordSplitterConstants";
 import SubmittersView from "./SubmittersView";
 
@@ -63,6 +64,55 @@ RecordSplitterSelect.defaultProps = {
 };
 
 class FlowBinderEdit extends React.Component {
+	onSubmit(event) {
+		event.preventDefault();
+		const flowBinderContent = new FlowBinderContent();
+		const form = event.target;
+		for(let i = 0; i < form.length; i++) {
+			if(form[i] === undefined) continue;
+			switch(form[i].name) {
+			case "name":
+				flowBinderContent.name = form[i].value;
+				break;
+			case "description":
+				flowBinderContent.description = form[i].value;
+				break;
+			case "format":
+				flowBinderContent.format = form[i].value;
+				break;
+			case "packaging":
+				flowBinderContent.packaging = form[i].value;
+				break;
+			case "charset":
+				flowBinderContent.charset = form[i].value;
+				break;
+			case "destination":
+				flowBinderContent.destination = form[i].value;
+				break;
+			case "priority":
+				flowBinderContent.priority = form[i].value;
+				break;
+			case "record-splitter":
+				flowBinderContent.recordSplitter = form[i].value;
+				break;
+			case "flow":
+				flowBinderContent.flowId = form[i].value;
+				break;
+			case "sink":
+				flowBinderContent.sinkId = form[i].value;
+				break;
+			case "submitters":
+				flowBinderContent.submitterIds = [];
+				for(let j = 0; j < form[i].length; j++) {
+					flowBinderContent.submitterIds.push(form[i][j].value);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		flowBinderContent.save();
+	}
 	render() {
 		const id = Number.parseInt(this.props.match.params.flowBinderId);
 		let flowBinder = this.context.store.getState().flowBinders.find(
@@ -84,7 +134,7 @@ class FlowBinderEdit extends React.Component {
 			false : (sinkHashMap.set(item.id))
 		);
 		return (
-			<form>
+			<form onSubmit={this.onSubmit.bind(this)}>
 				<div className="form-group">
 					<label htmlFor="name:">name</label>
 					<input type="text" name="name" defaultValue={flowBinder.content.name}/>

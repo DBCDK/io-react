@@ -1,7 +1,18 @@
+import Constants from "../Constants";
 import Flow from "./Flow";
+import HttpClient from "../HttpClient";
+import Path from "../utils";
 import Sink from "./Sink";
 
 class FlowBinderContent {
+	save() {
+		const path = new Path(Constants.createFlowBinderEndpoint);
+		new HttpClient().with_data(this)
+			.add_headers({"content-type": "application/json"})
+			.post(path.path).then(
+				json => console.log("flowbinder created", json))
+		.catch(console.error.bind(console));
+	}
 	static fromJson(json) {
 		const flowBinderContent = new this();
 		flowBinderContent.charset = json.charset;
@@ -31,4 +42,5 @@ class FlowBinder {
 	}
 }
 
+export {FlowBinderContent};
 export default FlowBinder;
