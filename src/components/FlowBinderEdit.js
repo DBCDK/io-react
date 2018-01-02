@@ -168,7 +168,7 @@ class FlowBinderEdit extends React.Component {
 					</select>
 				</div>
 				<RecordSplitterSelect recordSplitter={flowBinder.content.recordSplitter}/>
-				<SubmittersView withLabel={true} flowBinderId={flowBinder.id}/>
+				<SubmittersView withLabel={true} submitterIds={flowBinder.content.submitterIds}/>
 				<FlowSelect allFlows={flows} flow={flowBinder.content.flow}/>
 				<SinkSelect allSinks={sinks} sink={flowBinder.content.sink}/>
 				<input type="submit" value="save"/>

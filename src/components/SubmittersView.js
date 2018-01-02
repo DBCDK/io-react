@@ -3,12 +3,9 @@ import PropTypes from "prop-types";
 
 class SubmittersView extends React.Component {
 	render() {
-		const storeState = this.context.store.getState();
-		let submitters = [];
-		if(this.props.flowBinderId !== undefined && storeState.submitters.has(
-				this.props.flowBinderId)) {
-			submitters = storeState.submitters.get(this.props.flowBinderId);
-		}
+		const allSubmitters = this.context.store.getState().submitters;
+		const submitters = allSubmitters.filter(submitter =>
+			this.props.submitterIds.indexOf(submitter.id) !== -1);
 		return (
 			<div className="form-group">
 				{this.props.withLabel ? <label htmlFor="submitters">submitters</label> : <noop/>}

@@ -19,16 +19,6 @@ import {
 class FlowBinderElement extends React.Component {
 	componentDidMount() {
 		this.props.updateCallback(this.props.flowBinder);
-		this.showSubmitter();
-	}
-	showSubmitter() {
-		for(let i = 0; i < this.props.flowBinder.content.submitterIds.length; i++) {
-			this.props.submittersHandler.getSubmitter(this.props.flowBinder.content
-					.submitterIds[i]).then(submitter => {
-				this.context.store.dispatch(addSubmitter(submitter,
-					this.props.flowBinder.id));
-			});
-		}
 	}
 	getQueueProvider(sinkId) {
 		return "queue provider";
@@ -44,7 +34,7 @@ class FlowBinderElement extends React.Component {
 				<td>{this.props.flowBinder.content.charset}</td>
 				<td>{this.props.flowBinder.content.destination}</td>
 				<td>{this.props.flowBinder.content.recordSplitter}</td>
-				<td><SubmittersView flowBinderId={this.props.flowBinder.id}/></td>
+				<td><SubmittersView submitterIds={this.props.flowBinder.content.submitterIds}/></td>
 				<td>{this.props.flowBinder.content.flow.content.name}</td>
 				<td>{this.props.flowBinder.content.sink.content.name}</td>
 				<td>{this.getQueueProvider(this.props.flowBinder.sinkId)}</td>
@@ -62,11 +52,13 @@ FlowBinderElement.defaultProps = {
 	submittersHandler: new SubmittersHandler()
 };
 
-FlowBinderElement.contextTypes = {
-	store: PropTypes.object.isRequired
-};
-
 class FlowBindersList extends React.Component {
+	constructor(props, context) {
+		super(props, context);
+		this.state = {
+			submittersHandler: new SubmittersHandler()
+		};
+	}
 	componentWillMount() {
 		this.unsubscribe = this.context.store.subscribe(
 			this.forceUpdate.bind(this));
@@ -74,6 +66,13 @@ class FlowBindersList extends React.Component {
 			this.context.store.dispatch(addFlowBinders(BaseList.mapItemsFromJson(
 				FlowBinder, json)))
 		);
+		this.fetchSubmitters();
+	}
+	fetchSubmitters() {
+		this.state.submittersHandler.getSubmitters().then(submitters =>
+			submitters.forEach(submitter =>
+				this.context.store.dispatch(addSubmitter(submitter)))
+		).catch(console.error.bind(console));
 	}
 	componentWillUnmount() {
 		this.unsubscribe();

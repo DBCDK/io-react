@@ -1,5 +1,6 @@
 import BaseList from "./BaseList";
 import Constants from "../Constants";
+import HttpClient from "../HttpClient";
 import Submitter from "./Submitter";
 
 class SubmittersHandler {
@@ -25,6 +26,14 @@ class SubmittersHandler {
 					resolve(submitter);
 				}).catch(err => reject(err));
 			}
+		});
+	}
+	getSubmitters() {
+		return new Promise((resolve, reject) => {
+			new HttpClient().get(Constants.submittersEndpoint).then(jsonStr => {
+				const json = JSON.parse(jsonStr);
+				resolve(json.map(item => Submitter.fromJson(item)));
+			}).catch(err => reject(err));
 		});
 	}
 }
