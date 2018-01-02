@@ -1,5 +1,7 @@
 import request from "superagent";
 
+import Path from "./utils";
+
 // https://visionmedia.github.io/superagent/
 
 class HttpClient {
@@ -25,20 +27,27 @@ class HttpClient {
         this.query = query;
         return this;
     }
-    get(request_url) {
+    get(request_url, pathParams, queryObject) {
         this.method = "GET";
-        return this.url_open(request_url);
+        return this.url_open(request_url, pathParams, queryObject);
     }
-    post(request_url) {
+    post(request_url, pathParams, queryObject) {
         this.method = "POST";
-        return this.url_open(request_url);
+        return this.url_open(request_url, pathParams, queryObject);
     }
-    url_open(request_url) {
+    url_open(request_url, pathParams, queryObject) {
         let options = {
             url: request_url,
             method: this.method,
             headers: this.headers
         };
+        const path = new Path(request_url);
+        if(pathParams !== null && pathParams !== undefined) {
+            pathParams.forEach((value, key) => path.bind(key, value));
+        }
+        if(queryObject !== null && queryObject !== undefined) {
+            this.withQuery(queryObject);
+        }
         return this._make_request(options);
     }
     _add_headers(src_headers, dest_headers) {
