@@ -36,7 +36,7 @@ class JobElement extends React.Component {
 				<td>{this.props.job.state.failedItems()}</td>
 				<td>{this.props.job.state.ignoredItems()}</td>
 				<td>
-					<Link to={path}>info</Link>
+					<Link to={path}><button>info</button></Link>
 				</td>
 				<td className="status-icon">{status}</td>
 			</tr>
