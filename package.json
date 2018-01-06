@@ -1,17 +1,21 @@
 {
   "name": "dataio-gui",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0",
   "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
   "license": "GPLv3",
-  "devDependencies": {
-    "http-server": "^0.10.0"
-  },
   "dependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "6.26",
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.2",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-react": "6.24.1",
+    "body-parser": "1.18.2",
+    "express": "4.16.2",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-router-dom": "4.2.2",
+    "redux": "3.7.2",
+    "superagent": "3.8.2",
+    "webpack": "3.10.0"
   }
 }
