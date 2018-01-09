@@ -7,6 +7,7 @@ WORKDIR $HOME
 COPY src src
 COPY .babelrc .babelrc
 COPY package.json package.json
+COPY yarn.lock yarn.lock
 COPY webpack.config.js webpack.config.js
 
 RUN "yarn"
