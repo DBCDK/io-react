@@ -38,7 +38,7 @@ class FlowBinderElement extends React.Component {
 				<td>{this.props.flowBinder.content.flow.content.name}</td>
 				<td>{this.props.flowBinder.content.sink.content.name}</td>
 				<td>{this.getQueueProvider(this.props.flowBinder.sinkId)}</td>
-				<td><Link to={editPath}>edit</Link></td>
+				<td><Link to={editPath}><button>edit</button></Link></td>
 			</tr>
 		)
 	}
