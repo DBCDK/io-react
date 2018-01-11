@@ -74,6 +74,10 @@ class StoresConnector {
 			`${flowStoreBaseUrl}/${flowBinders}`
 		);
 	}
+	static deleteFlowBinder(flowBinderId, flowBinderVersion) {
+		return new HttpClient().add_headers({"If-Match": flowBinderVersion})
+			.delete(`${flowStoreBaseUrl}/${flowBinders}/${flowBinderId}`);
+	}
 	static getFlow(flowId) {
 		return new HttpClient().get(`${flowStoreBaseUrl}/${flows}/${flowId}`);
 	}

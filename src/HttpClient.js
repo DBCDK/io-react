@@ -35,6 +35,10 @@ class HttpClient {
         this.method = "POST";
         return this.url_open(request_url, pathParams, queryObject);
     }
+    delete(requestUrl, pathParams, queryObject) {
+        this.method = "DELETE";
+        return this.url_open(requestUrl, pathParams, queryObject);
+    }
     url_open(request_url, pathParams, queryObject) {
         let options = {
             url: request_url,

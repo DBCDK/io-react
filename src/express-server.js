@@ -105,6 +105,14 @@ app.post(Constants.createFlowBinderEndpoint, (req, res) => {
 	}).catch(err => res.status(500).send(err));
 });
 
+app.delete(Constants.singleFlowBinderEndpoint, (req, res) => {
+	// notice that the header name is lowercased by express
+	StoresConnector.deleteFlowBinder(req.params.flowBinderId,
+			req.headers["if-match"]).then(() =>
+		res.sendStatus(200)
+	).catch(err => res.status(500).send(err));
+});
+
 // handle the rest of the routing in the client
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "/static/index.html"));
