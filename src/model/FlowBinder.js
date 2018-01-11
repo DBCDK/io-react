@@ -33,6 +33,15 @@ class FlowBinderContent {
 }
 
 class FlowBinder {
+	delete() {
+		const params = new Map();
+		params.set("flowBinderId", this.id);
+		new HttpClient().add_headers({"If-Match": this.version})
+				.delete(Constants.singleFlowBinderEndpoint,
+				params).then(() => console.log(
+			`flowbinder ${this.id} deleted`))
+			.catch(err => console.error(`error deleting flowbinder ${this.id}: ${err}`))
+	}
 	static fromJson(json) {
 		const flowBinder = new this();
 		flowBinder.id = json.id;

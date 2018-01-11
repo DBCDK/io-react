@@ -64,6 +64,17 @@ RecordSplitterSelect.defaultProps = {
 };
 
 class FlowBinderEdit extends React.Component {
+	constructor(props, context) {
+		super(props, context);
+		const id = Number.parseInt(this.props.match.params.flowBinderId);
+		let flowBinder = this.context.store.getState().flowBinders.find(
+			f => f.id === id);
+		if(flowBinder === undefined) {
+			flowBinder = new FlowBinder();
+			flowBinder.content = {};
+		}
+		this.state = {flowBinder};
+	}
 	onSubmit(event) {
 		event.preventDefault();
 		const flowBinderContent = new FlowBinderContent();
@@ -113,14 +124,10 @@ class FlowBinderEdit extends React.Component {
 		}
 		flowBinderContent.save();
 	}
+	onDelete() {
+		this.state.flowBinder.delete();
+	}
 	render() {
-		const id = Number.parseInt(this.props.match.params.flowBinderId);
-		let flowBinder = this.context.store.getState().flowBinders.find(
-			f => f.id === id);
-		if(flowBinder === undefined) {
-			flowBinder = new FlowBinder();
-			flowBinder.content = {};
-		}
 		const flowHashMap = new Map();
 		const flows = this.context.store.getState().flowBinders.map(f =>
 			f.content.flow
@@ -137,27 +144,27 @@ class FlowBinderEdit extends React.Component {
 			<form onSubmit={this.onSubmit.bind(this)}>
 				<div className="form-group">
 					<label htmlFor="name:">name</label>
-					<input type="text" name="name" defaultValue={flowBinder.content.name}/>
+					<input type="text" name="name" defaultValue={this.state.flowBinder.content.name}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="description:">description</label>
-					<input type="text" name="description" defaultValue={flowBinder.content.description}/>
+					<input type="text" name="description" defaultValue={this.state.flowBinder.content.description}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="format:">format</label>
-					<input type="text" name="format" defaultValue={flowBinder.content.format}/>
+					<input type="text" name="format" defaultValue={this.state.flowBinder.content.format}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="packaging:">packaging</label>
-					<input type="text" name="packaging" defaultValue={flowBinder.content.packaging}/>
+					<input type="text" name="packaging" defaultValue={this.state.flowBinder.content.packaging}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="charset:">charset</label>
-					<input type="text" name="charset" defaultValue={flowBinder.content.charset}/>
+					<input type="text" name="charset" defaultValue={this.state.flowBinder.content.charset}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="destination:">destination</label>
-					<input type="text" name="destination" defaultValue={flowBinder.content.destination}/>
+					<input type="text" name="destination" defaultValue={this.state.flowBinder.content.destination}/>
 				</div>
 				<div className="form-group">
 					<label htmlFor="priority:">priority</label>
@@ -167,11 +174,14 @@ class FlowBinderEdit extends React.Component {
 						<option value="3">high</option>
 					</select>
 				</div>
-				<RecordSplitterSelect recordSplitter={flowBinder.content.recordSplitter}/>
-				<SubmittersView withLabel={true} submitterIds={flowBinder.content.submitterIds}/>
-				<FlowSelect allFlows={flows} flow={flowBinder.content.flow}/>
-				<SinkSelect allSinks={sinks} sink={flowBinder.content.sink}/>
-				<input type="submit" value="save"/>
+				<RecordSplitterSelect recordSplitter={this.state.flowBinder.content.recordSplitter}/>
+				<SubmittersView withLabel={true} submitterIds={this.state.flowBinder.content.submitterIds}/>
+				<FlowSelect allFlows={flows} flow={this.state.flowBinder.content.flow}/>
+				<SinkSelect allSinks={sinks} sink={this.state.flowBinder.content.sink}/>
+				<div>
+					<input type="submit" value="save"/>
+					<input type="button" value="delete" onClick={this.onDelete.bind(this)}/>
+				</div>
 			</form>
 		)
 	}
