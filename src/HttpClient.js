@@ -49,6 +49,7 @@ class HttpClient {
         if(pathParams !== null && pathParams !== undefined) {
             pathParams.forEach((value, key) => path.bind(key, value));
         }
+        options.url = path.path;
         if(queryObject !== null && queryObject !== undefined) {
             this.withQuery(queryObject);
         }
