@@ -31,8 +31,8 @@ class AddiRecord {
 			numBytes = 1;
 		}
 		const oldPos = this.pos;
-		if(this.pos + numBytes >= this.buffer.length) {
-			this.pos = this.buffer.length - 1;
+		if(this.pos + numBytes > this.buffer.length) {
+			this.pos = this.buffer.length;
 		} else {
 			this.pos += numBytes;
 		}
