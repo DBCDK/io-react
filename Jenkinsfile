@@ -7,7 +7,7 @@ void deploy(String deployEnvironment) {
 		git(url: "gitlab@git-platform.dbc.dk:metascrum/deploy.git", credentialsId: "gitlab-meta")
 	}
 	sh """
-		marathon-config-producer deploy/marathon/dataio single gui-${deployEnvironment} --template-keys BRANCH_NAME=${env.BRANCH_NAME} BUILD_NUMBER=${env.BUILD_NUMBER} -o gui-${deployEnvironment}.json
+		marathon-config-producer gui-${deployEnvironment} --root deploy/marathon/dataio --template-keys BRANCH_NAME=${env.BRANCH_NAME} BUILD_NUMBER=${env.BUILD_NUMBER} -o gui-${deployEnvironment}.json
 		marathon-deployer -a ${MARATHON_TOKEN} -b https://mcp1.dbc.dk:8443 deploy gui-${deployEnvironment}.json
 	"""
 }
