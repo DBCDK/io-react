@@ -24,6 +24,17 @@ pipeline {
 		timestamps()
 	}
 	stages {
+		stage("install") {
+			steps {
+				// use npm since build machine doesn't have yarn
+				sh "npm install"
+			}
+		}
+		stage("unit testing") {
+			steps {
+				sh "npm test"
+			}
+		}
 		stage("docker build") {
 			steps {
 				script {
