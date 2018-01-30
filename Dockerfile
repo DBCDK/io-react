@@ -1,4 +1,4 @@
-FROM node:9-alpine
+FROM docker-io.dbc.dk/node:9-alpine
 
 ENV USER node
 ENV HOME /home/$USER
